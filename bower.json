@@ -1,0 +1,34 @@
+{
+  "name": "Leaflet.FileLayer",
+  "main": "dist/leaflet.filelayer.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/joeybaker/Leaflet.FileLayer",
+  "authors": [
+    "Joey Baker <joey@byjoeybaker.com>",
+    "Mathieu Leplatre <contact@mathieu-leplatre.info>"
+  ],
+  "description": "Loads files locally (GeoJSON, KML, GPX) as layers using HTML5 File API",
+  "keywords": [
+    "leaflet",
+    "map",
+    "kml",
+    "geojson",
+    "gpx",
+    "upload",
+    "GIS",
+    "HTML5",
+    "client-side"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "togeojson": "mapbox/togeojson#~0.4.0",
+    "leaflet": "~0.6.4"
+  }
+}
