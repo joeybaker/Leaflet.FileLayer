@@ -34,7 +34,19 @@ Events:
 ```
 
 
-Authors
--------
+## Changelog
+
+### 0.2.0
+* Converted to a UMD module
+* added grunt deploy process
+* Now, also a bower module
+
+### 0.1.0
+Initial
+
+
+## Authors
 
 [![Makina Corpus](http://depot.makina-corpus.org/public/logo.gif)](http://makinacorpus.com)
+
+[Joey Baker](http://byjoeybaker.com)
