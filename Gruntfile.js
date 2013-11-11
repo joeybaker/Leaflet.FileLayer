@@ -122,7 +122,7 @@ module.exports = function(grunt){
         }
       }
       , gitCommitPackage: {
-        command: 'git commit --amend -i package.json --reuse-message HEAD'
+        command: 'git commit --amend -i package.json bower.json dist --reuse-message HEAD'
         , options: {
           stdout: true
           , failOnError: true
