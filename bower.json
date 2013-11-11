@@ -28,7 +28,7 @@
     "tests"
   ],
   "dependencies": {
-    "togeojson": "joeybaker/togeojson#~0.4.1",
+    "togeojson": "mapbox/togeojson#~0.4.1",
     "leaflet": "~0.6.4"
   }
 }
