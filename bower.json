@@ -1,7 +1,7 @@
 {
   "name": "Leaflet.FileLayer",
   "main": "dist/leaflet.filelayer.js",
-  "version": "0.1.0",
+  "version": "0.2.0-alpha2",
   "homepage": "https://github.com/joeybaker/Leaflet.FileLayer",
   "authors": [
     "Joey Baker <joey@byjoeybaker.com>",
@@ -28,7 +28,7 @@
     "tests"
   ],
   "dependencies": {
-    "togeojson": "mapbox/togeojson#~0.4.0",
+    "togeojson": "joeybaker/togeojson#~0.4.1",
     "leaflet": "~0.6.4"
   }
 }
