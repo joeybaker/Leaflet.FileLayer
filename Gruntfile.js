@@ -54,7 +54,8 @@ module.exports = function(grunt){
         src: ['lib/leaflet.filelayer.js']
         , dest: 'dist/leaflet.filelayer.js'
         , deps: {
-          'default': ['leaflet', 'toGeoJSON']
+          // we require leaflet, but it needs to be in the global scope to work, so … meh.
+          'default': ['togeojson']
           , global: ['L', 'toGeoJSON']
         }
         , objectToExport: 'FileLoader'
@@ -174,6 +175,7 @@ module.exports = function(grunt){
     , 'shell:gitCommitPackage'
     , 'shell:gitTag'
     , 'shell:gitPush'
-    , 'shell:npmPublish'
+    // already on NPM and I don't have access, so just a bower module for now (make more sense as a bower module anyway)
+    // , 'shell:npmPublish'
   ])
 }

@@ -1,14 +1,14 @@
 (function(root, factory) {
     if(typeof exports === 'object') {
-        module.exports = factory(require('leaflet'), require('togeojson'));
+        module.exports = factory(require('togeojson'));
     }
     else if(typeof define === 'function' && define.amd) {
-        define(['leaflet', 'togeojson'], factory);
+        define(['togeojson'], factory);
     }
     else {
-        root.L.FileLoader = factory(root.L, root.togeojson);
+        root.L.FileLoader = factory(root.L, root.toGeoJSON);
     }
-}(this, function(leaflet, togeojson) {
+}(this, function(togeojson) {
 'use strict';
 /*
  * Load files *locally* (GeoJSON, KML, GPX) into the map
@@ -17,14 +17,15 @@
  * Requires Pavel Shramov's GPX.js
  * https://github.com/shramov/leaflet-plugins/blob/d74d67/layer/vector/GPX.js
  */
-var L = leaflet ? leaflet : window.L
-  , FileLoader = L.Class.extend({
+/* global leaflet */
+var L = leaflet || window.L
+, FileLoader = L.Class.extend({
   includes: L.Mixin.Events,
   options: {
     layerOptions: {}
   },
 
-  initialize: function(map, options) {
+  initialize: function(map, options){
     this._map = map;
     L.Util.setOptions(this, options);
 
@@ -35,17 +36,17 @@ var L = leaflet ? leaflet : window.L
     };
   },
 
-  load: function(file /* File */ ) {
+  load: function(file){
     // Check file extension
     var ext = file.name.split('.').pop(),
       parser = this._parsers[ext];
-    if (!parser) {
-      window.alert("Unsupported file type " + file.type + '(' + ext + ')');
+    if (!parser){
+      window.alert('Unsupported file type ' + file.type + '(' + ext + ')');
       return;
     }
     // Read selected file using HTML5 File API
     var reader = new FileReader();
-    reader.onload = L.Util.bind(function(e) {
+    reader.onload = L.Util.bind(function(e){
       this.fire('data:loading', {
         filename: file.name,
         format: ext
@@ -60,23 +61,22 @@ var L = leaflet ? leaflet : window.L
     reader.readAsText(file);
   },
 
-  _loadGeoJSON: function(content) {
-    if (typeof content == 'string') {
+  _loadGeoJSON: function(content){
+    if (typeof content === 'string'){
       content = JSON.parse(content);
     }
     return L.geoJson(content, this.options.layerOptions).addTo(this._map);
   },
 
-  _convertToGeoJSON: function(content, format) {
+  _convertToGeoJSON: function(content, format){
     // Format is either 'gpx' or 'kml'
-    if (typeof content == 'string') {
-      content = (new window.DOMParser()).parseFromString(content, "text/xml");
+    if (typeof content === 'string'){
+      content = (new window.DOMParser()).parseFromString(content, 'text/xml');
     }
     var geojson = toGeoJSON[format](content);
     return this._loadGeoJSON(geojson);
   }
 });
-
 
 L.Control.FileLayerLoad = L.Control.extend({
   statics: {
@@ -89,20 +89,20 @@ L.Control.FileLayerLoad = L.Control.extend({
     layerOptions: {}
   },
 
-  initialize: function(options) {
+  initialize: function(options){
     L.Util.setOptions(this, options);
     this.loader = null;
   },
 
-  onAdd: function(map) {
+  onAdd: function(map){
     this.loader = new FileLoader(map, {
       layerOptions: this.options.layerOptions
     });
 
-    this.loader.on('data:loaded', function(e) {
+    this.loader.on('data:loaded', function(e){
       // Fit bounds after loading
-      if (this.options.fitBounds) {
-        window.setTimeout(function() {
+      if (this.options.fitBounds){
+        window.setTimeout(function(){
           map.fitBounds(e.layer.getBounds()).zoomOut();
         }, 500);
       }
@@ -115,69 +115,72 @@ L.Control.FileLayerLoad = L.Control.extend({
     return this._initContainer();
   },
 
-  _initDragAndDrop: function(map) {
-    var fileLoader = this.loader,
-      dropbox = map._container;
+  _initDragAndDrop: function(map){
+    var fileLoader = this.loader
+      , dropbox = map._container
+      , callbacks = {
+        dragenter: function(){
+          map.scrollWheelZoom.disable();
+        },
+        dragleave: function(){
+          map.scrollWheelZoom.enable();
+        },
+        dragover: function(e){
+          e.stopPropagation();
+          e.preventDefault();
+        },
+        drop: function(e){
+          var files = Array.prototype.slice.apply(e.dataTransfer.files)
+            , loadInterval = 25
 
-    var callbacks = {
-      dragenter: function() {
-        map.scrollWheelZoom.disable();
-      },
-      dragleave: function() {
-        map.scrollWheelZoom.enable();
-      },
-      dragover: function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-      },
-      drop: function(e) {
-        e.stopPropagation();
-        e.preventDefault();
+          ;(function dropLoad(){
+            fileLoader.load(files.shift());
+            if (files.length > 0){
+              setTimeout(dropLoad, loadInterval)
+            }
+          })()
 
-        var files = Array.prototype.slice.apply(e.dataTransfer.files),
-          i = files.length;
-        setTimeout(function() {
-          fileLoader.load(files.shift());
-          if (files.length > 0) {
-            setTimeout(arguments.callee, 25);
-          }
-        }, 25);
-        map.scrollWheelZoom.enable();
-      }
-    };
+          e.stopPropagation();
+          e.preventDefault();
+
+          map.scrollWheelZoom.enable();
+        }
+      };
+
     for (var name in callbacks)
       dropbox.addEventListener(name, callbacks[name], false);
   },
 
-  _initContainer: function() {
+  _initContainer: function(){
     // Create an invisible file input
-    var fileInput = L.DomUtil.create('input', 'hidden', container);
+    var fileLoader = this.loader
+    // Create a button, and bind click on hidden file input
+      , zoomName = 'leaflet-control-filelayer leaflet-control-zoom'
+      , barName = 'leaflet-bar'
+      , partName = barName + '-part'
+      , container = L.DomUtil.create('div', zoomName + ' ' + barName)
+      , fileInput = L.DomUtil.create('input', 'hidden', container)
+      , link = L.DomUtil.create('a', zoomName + '-in ' + partName, container)
+      , stop = L.DomEvent.stopPropagation;
+
     fileInput.type = 'file';
     fileInput.accept = '.gpx,.kml,.geojson';
     fileInput.style.display = 'none';
     // Load on file change
-    var fileLoader = this.loader;
-    fileInput.addEventListener("change", function(e) {
+    fileInput.addEventListener('change', function(){
       fileLoader.load(this.files[0]);
     }, false);
 
-    // Create a button, and bind click on hidden file input
-    var zoomName = 'leaflet-control-filelayer leaflet-control-zoom',
-      barName = 'leaflet-bar',
-      partName = barName + '-part',
-      container = L.DomUtil.create('div', zoomName + ' ' + barName);
-    var link = L.DomUtil.create('a', zoomName + '-in ' + partName, container);
     link.innerHTML = L.Control.FileLayerLoad.LABEL;
     link.href = '#';
     link.title = L.Control.FileLayerLoad.TITLE;
 
-    var stop = L.DomEvent.stopPropagation;
     L.DomEvent
       .on(link, 'click', stop)
       .on(link, 'mousedown', stop)
       .on(link, 'dblclick', stop)
       .on(link, 'click', L.DomEvent.preventDefault)
-      .on(link, 'click', function(e) {
+      .on(link, 'click', function(e){
         fileInput.click();
         e.preventDefault();
       });
@@ -185,7 +188,7 @@ L.Control.FileLayerLoad = L.Control.extend({
   }
 });
 
-L.Control.fileLayerLoad = function(options) {
+L.Control.fileLayerLoad = function(options){
   return new L.Control.FileLayerLoad(options);
 };
 
