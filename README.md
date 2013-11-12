@@ -55,14 +55,31 @@ Generated HTML for the button
 </div>
 ```
 
+#### DOM elements
+```js
+    var control = L.Control.fileLayerLoad();
+
+    control.button // the DOM element for the upload button
+    control.fileInput // the DOM element for the hidden file input
+    control.onClick // the function that's called when the user clicks on the button. This is useful if you want to override the default behavior
+
+    // example of overriding the default button behavior
+    L.DomEvent.removeListener(control.button, 'click', control.onclick)
+
+    $(control.button).on('click', function(){
+      console.log('The user clicked the upload button!')
+    })
+```
 
 ## Changelog
 
 ### 0.2.4
 * Expose class names for user configuration
+* Allow the user to upload the same file twice in a row
+* Expose DOM elements and events so that the default button click behavior can be overridden.
 
 ### 0.2.3
-* Added `addToMap` option
+* Added `addToMap` option, to make adding the resulting geojson to the map optional. This is useful if you want to control which layer the geojson is added to.
 
 ### 0.2.0
 * Converted to a UMD module
