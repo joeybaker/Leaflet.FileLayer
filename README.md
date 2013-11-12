@@ -26,7 +26,7 @@ For GPX and KML files, it currently depends on [Tom MacWright's togeojson.js](ht
     }).addTo(map);
 ```
 
-Events:
+### Events
 
 ```js
     var control = L.Control.fileLayerLoad();
@@ -37,8 +37,29 @@ Events:
     });
 ```
 
+### Config
+
+#### Button
+`L.Control.FileLayerLoad.title` The `title` attr given to the upload button.
+`L.Control.FileLayerLoad.label` The text of the upload button.
+`L.Control.FileLayerLoad.className` The `class` name of the container of the upload button.
+`L.Control.FileLayerLoad.barName` The `class` name of the immediate child of the container
+`L.Control.FileLayerLoad.barPartName` The `class` name of the actual button
+
+Generated HTML for the button
+```html
+<div class="L.Control.FileLayerLoad.className leaflet-control">
+  <div class="L.Control.FileLayerLoad.barName">
+    <a class="L.Control.FileLayerLoad.className L.Control.FileLayerLoad.barPartName" href="#" title="L.Control.FileLayerLoad.title">L.Control.FileLayerLoad.label</a>
+  </div>
+</div>
+```
+
 
 ## Changelog
+
+### 0.2.4
+* Expose class names for user configuration
 
 ### 0.2.3
 * Added `addToMap` option
