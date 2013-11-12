@@ -1,7 +1,7 @@
 {
   "name": "Leaflet.FileLayer",
   "main": "dist/leaflet.filelayer.js",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "homepage": "https://github.com/joeybaker/Leaflet.FileLayer",
   "authors": [
     "Joey Baker <joey@byjoeybaker.com>",
