@@ -22,7 +22,8 @@ var L = leaflet || window.L
 , FileLoader = L.Class.extend({
   includes: L.Mixin.Events,
   options: {
-    layerOptions: {}
+    layerOptions: {},
+    addToMap: true
   },
 
   initialize: function(map, options){
@@ -62,10 +63,11 @@ var L = leaflet || window.L
   },
 
   _loadGeoJSON: function(content){
+    var geojson = L.geoJson(content, this.options.layerOptions);
     if (typeof content === 'string'){
       content = JSON.parse(content);
     }
-    return L.geoJson(content, this.options.layerOptions).addTo(this._map);
+    return this.options.addToMap ? geojson.addTo(this._map) : geojson;
   },
 
   _convertToGeoJSON: function(content, format){

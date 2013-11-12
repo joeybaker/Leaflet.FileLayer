@@ -12,21 +12,25 @@ Check out the [demo](http://makinacorpus.github.com/Leaflet.FileLayer/) !
 
 For GPX and KML files, it currently depends on [Tom MacWright's togeojson.js](https://github.com/tmcw/togeojson).
 
-Usage
------
+## Usage
 
-```
+```js
     var map = L.map('map').fitWorld();
-    ...
+
     L.Control.fileLayerLoad({
-        layerOptions: {style: {color:'red'}}
+        layerOptions: {
+          // http://leafletjs.com/reference.html#geojson-options
+        }
+        , addToMap: true // after loading the GeoJSON, should it be added to the map?
+        , position: 'topleft'
     }).addTo(map);
 ```
 
 Events:
 
-```
+```js
     var control = L.Control.fileLayerLoad();
+
     control.loader.on('data:loaded', function (e) {
         // Add to map layer switcher
         layerswitcher.addOverlay(e.layer, e.filename);
@@ -35,6 +39,9 @@ Events:
 
 
 ## Changelog
+
+### 0.2.1
+* Added `addToMap` option
 
 ### 0.2.0
 * Converted to a UMD module
