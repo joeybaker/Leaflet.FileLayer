@@ -35,6 +35,14 @@ For GPX and KML files, it currently depends on [Tom MacWright's togeojson.js](ht
         // Add to map layer switcher
         layerswitcher.addOverlay(e.layer, e.filename);
     });
+
+    control.loader.on('data:loading', function(e){
+      console.log(e.filename, e.ext)
+    })
+
+    control.loader.on('data:error', function(e){
+      console.log(e.error, e.message)
+    })
 ```
 
 ### Config
@@ -50,7 +58,7 @@ Generated HTML for the button
 ```html
 <div class="L.Control.FileLayerLoad.className leaflet-control">
   <div class="L.Control.FileLayerLoad.barName">
-    <a class="L.Control.FileLayerLoad.className L.Control.FileLayerLoad.barPartName" href="#" title="L.Control.FileLayerLoad.title">L.Control.FileLayerLoad.label</a>
+    <a class="L.Control.FileLayerLoad.barPartName" href="#" title="L.Control.FileLayerLoad.title">L.Control.FileLayerLoad.label</a>
   </div>
 </div>
 ```
@@ -72,6 +80,11 @@ Generated HTML for the button
 ```
 
 ## Changelog
+
+### 0.2.5
+* throw an error event when the uploaded file fails to parse
+* only fire the `data:loaded` event when the data is successfully parses.
+* remove the `className` from the `barName` element.
 
 ### 0.2.4
 * Expose class names for user configuration

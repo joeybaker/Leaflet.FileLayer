@@ -58,7 +58,7 @@ var L = window.L
 
       layer = parser.call(this, e.target.result, ext)
 
-      this.fire('data:loaded', {
+      if (layer) this.fire('data:loaded', {
         layer: layer
         , filename: file.name
         , format: ext
@@ -68,11 +68,22 @@ var L = window.L
   }
 
   , _loadGeoJSON: function(content){
-    var geojson = L.geoJson(content, this.options.layerOptions)
+    var geojson
 
     if (typeof content === 'string'){
       content = JSON.parse(content)
     }
+
+    try {
+      geojson = L.geoJson(content, this.options.layerOptions)
+    }
+    catch (e) {
+      this.fire('data:error', {
+        error: e
+        , message: 'Error parsing XML'
+      })
+    }
+
     return this.options.addToMap ? geojson.addTo(this._map) : geojson
   }
 
@@ -169,7 +180,7 @@ L.Control.FileLayerLoad = L.Control.extend({
       , partName = L.Control.FileLayerLoad.barPartName
       , container = L.DomUtil.create('div', baseClassName)
       , bar = L.DomUtil.create('div', barClassName, container)
-      , link = L.DomUtil.create('a', baseClassName + ' ' + partName, bar)
+      , link = L.DomUtil.create('a', partName, bar)
       , fileInput = L.DomUtil.create('input', 'hidden', link)
       , onclick
 
