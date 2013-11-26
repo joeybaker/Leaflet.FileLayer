@@ -182,6 +182,7 @@ L.Control.FileLayerLoad = L.Control.extend({
       , bar = L.DomUtil.create('div', barClassName, container)
       , link = L.DomUtil.create('a', partName, bar)
       , fileInput = L.DomUtil.create('input', 'hidden', link)
+      , self = this
       , onclick
 
     fileInput.type = 'file'
@@ -189,6 +190,14 @@ L.Control.FileLayerLoad = L.Control.extend({
     fileInput.style.display = 'none'
     // Load on file change
     fileInput.addEventListener('change', function(){
+      if ((this.files[0].size / 1024).toFixed(4) > self.options.fileSize) {
+        fileLoader.fire('data:error', {
+          error: new Error('File size to big.')
+          , message: 'Files need to be smaller than ' + self.options.fileSize + 'kb.'
+        })
+        return
+      }
+
       fileLoader.load(this.files[0])
       // reset so that the user can upload the same file again if they want to
       this.value = ''

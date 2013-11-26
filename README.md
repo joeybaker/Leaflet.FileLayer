@@ -23,6 +23,7 @@ For GPX and KML files, it currently depends on [Tom MacWright's togeojson.js](ht
         }
         , addToMap: true // after loading the GeoJSON, should it be added to the map?
         , position: 'topleft'
+        , fileSize: 1024 // 1024kb by default. Pass any integer to set the kb file size limit.
     }).addTo(map);
 ```
 
@@ -80,6 +81,9 @@ Generated HTML for the button
 ```
 
 ## Changelog
+
+### 0.2.6
+* Added `fileSize` option to limit the size of uploaded files.
 
 ### 0.2.5
 * throw an error event when the uploaded file fails to parse
