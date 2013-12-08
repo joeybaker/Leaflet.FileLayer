@@ -109,6 +109,9 @@ Generated HTML for the button
 ### 0.1.0
 Initial
 
+## Developing
+* The `dist` folder is auto-generated when running `grunt publish`
+* Please update the Changelog in the readme for each release.
 
 ## Authors
 
