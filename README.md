@@ -82,6 +82,9 @@ Generated HTML for the button
 
 ## Changelog
 
+### 0.2.7
+* Trigger an error event if the parsed GeoJSON has no layers. This could be caused by a filter function.
+
 ### 0.2.6
 * Added `fileSize` option to limit the size of uploaded files.
 
