@@ -1,3 +1,5 @@
+_NOTE: this is based on [makinacorpus/Leaflet.FileLayer](https://github.com/makinacorpus/Leaflet.FileLayer). The API is similar but slighlyt different. I no longer maintain this, and since most of the changes have been merged upstream, please use makinacorpus repo instead!_
+
 Leaflet.FileLayer
 =================
 
